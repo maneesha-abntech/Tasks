@@ -20,6 +20,7 @@
 * **Robust**: Get production-ready code. With automatic interactive documentation.
 
 ## Table of Contents
+- [Main Features](#main-features)
 - [Documentation](#documentation)
 - [Main Features](#main-features)
 - [Requirements](#requirements)
