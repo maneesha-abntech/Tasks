@@ -3,7 +3,6 @@
 
 **Framework**:![Static Badge](https://img.shields.io/badge/FastAPI-%2318c482?style=plastic)
 
-
 ## Documentation
 **Tutorial-User Guide** : <a href="https://fastapi.tiangolo.com" target="_blank">https://fastapi.tiangolo.com</a>
 
