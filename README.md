@@ -56,8 +56,8 @@ $ uvicorn main:app --reload
 ```
 </div>
 
+***
 ## Table of Contents
-
 - [Documentation](#documentation)
 - [Requirements](#requirements)
 - [Installation](#installation)
