@@ -59,5 +59,7 @@ $ uvicorn main:app --reload
 ## Table of Contents
 
 - [Documentation](#documentation)
+- [Requirements](#requirements)
+- [Installation](#installation)
 
 
