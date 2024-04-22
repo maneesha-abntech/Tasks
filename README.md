@@ -54,6 +54,10 @@ Run the server with:
 ```console
 $ uvicorn main:app --reload
 ```
-
 </div>
+
+## Table of Contents
+
+- [Documentation](#documentation)
+
 
