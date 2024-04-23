@@ -10,7 +10,11 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
  
 # Dependency
+
 def get_db():
+    """
+    Dependency function to get a database session.
+    """
     db = SessionLocal()
     try:
         yield db
@@ -19,6 +23,10 @@ def get_db():
  
 @app.post("/books/")
 def create_book(book: schemas.BookCreate, db: Session = Depends(get_db)):
+
+    """
+    Create a new book.
+    """
     db_book = models.Book(**book.dict())
     db.add(db_book)
     db.commit()
@@ -28,6 +36,9 @@ def create_book(book: schemas.BookCreate, db: Session = Depends(get_db)):
  
 @app.get("/books/{book_id}")
 def get_book(book_id: int, db: Session = Depends(get_db)):
+    """
+    Get details of a specific book.
+    """
     db_book = db.query(models.Book).filter(models.Book.id == book_id).first()
     if db_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
@@ -35,6 +46,10 @@ def get_book(book_id: int, db: Session = Depends(get_db)):
  
 @app.put("/books/{book_id}")
 def update_book(book_id: int, book: schemas.BookCreate, db: Session = Depends(get_db)):
+
+    """
+    Update details of a specific book.
+    """
     db_book = db.query(models.Book).filter(models.Book.id == book_id).first()
     if db_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
@@ -46,9 +61,16 @@ def update_book(book_id: int, book: schemas.BookCreate, db: Session = Depends(ge
  
 @app.delete("/books/{book_id}")
 def delete_book(book_id: int, db: Session = Depends(get_db)):
+
+    """
+    Delete a specific book.
+    """
+
     db_book = db.query(models.Book).filter(models.Book.id == book_id).first()
     if db_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
     db.delete(db_book)
     db.commit()
     return {"message": "Book deleted successfully"}
+
+#print(delete_book.__doc__)
