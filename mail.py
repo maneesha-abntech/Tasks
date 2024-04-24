@@ -21,6 +21,15 @@ otp_storage = {}
 
 @app.post("/forgot-password/")
 async def send_otp_for_password_reset(email: str):
+    """
+    Send OTP for password reset to the provided email.
+
+    Parameters:
+        -->email (str): The email address to send the OTP.
+
+    Returns:
+        dict: A message indicating the OTP has been sent successfully.
+    """
     # Generate and send OTP
     otp = ''.join(random.choices(string.digits, k=6))
     otp_storage[email] = otp
@@ -37,6 +46,18 @@ async def send_otp_for_password_reset(email: str):
 
 @app.post("/reset-password/")
 async def reset_password(email: str, otp: str, new_password: str, confirm_password: str):
+    """
+    Reset the password for the provided email.
+
+    Parameters:
+        -->email (str): The email address for which to reset the password.
+        --> otp (str): The OTP received for password reset.
+        --> new_password (str): The new password.
+        --> confirm_password (str): The confirmation of the new password.
+
+    Returns:
+        dict: A message indicating the password reset was successful.
+    """
     if email in otp_storage and otp_storage[email] == otp:
         # Check if new password matches confirm password
         if new_password == confirm_password:
@@ -57,6 +78,12 @@ async def reset_password(email: str, otp: str, new_password: str, confirm_passwo
 
 
 async def send_confirmation_email(email: str):
+    """
+    Send a confirmation email for password reset.
+
+    Parameters:
+        -->email (str): The email address to which the confirmation email is sent.
+    """
     subject = "<h2> Password Reset Successful </h2>"
     message = "Your password has been reset successfully."
 
