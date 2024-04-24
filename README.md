@@ -99,4 +99,5 @@ An ORM has tools to convert ("map") between objects in code and database tables 
 
 With an ORM, you normally create a class that represents a table in a SQL database, each attribute of the class represents a column, with a name and a type.
 
-
+### Regular Expressions
+A regular expression (regex) is a sequence of characters that define a search pattern.
