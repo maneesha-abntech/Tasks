@@ -36,12 +36,7 @@
 
 ## Requirements
 
-Python 3.8+
-
-FastAPI stands on the shoulders of giants:
-
-* <a href="https://www.starlette.io/" target="_blank">Starlette</a> for the web parts.
-* <a href="https://docs.pydantic.dev/" target="_blank">Pydantic</a> for the data parts.
+**Python 3.8+**
 
 ## Installation
 
