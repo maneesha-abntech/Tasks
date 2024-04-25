@@ -34,6 +34,9 @@
 
 **Tutorial-User Guide** : <a href="https://fastapi.tiangolo.com" target="_blank">https://fastapi.tiangolo.com</a>
 
+## Requirements
+**python 3.8+** You can download it from the [official Python website](https://www.python.org/downloads/).
+
 ## Installation
 
 <div class="termy">
@@ -99,10 +102,11 @@ With an ORM, you normally create a class that represents a table in a SQL databa
 
 This project demonstrates a simple password reset functionality using FastAPI, Pydantic, and SQLite.
 
-## Requirements
+**Install FastAPI, Pydantic, and FastAPI-Mail**:
+  - Open your terminal or command prompt.
+  - Execute the following command to install the required packages:
 
-- Python 3.x
-- FastAPI
-- Pydantic
-- fastapi-mail
-- SQLite
+   ```
+   pip install fastapi pydantic fastapi-mail
+   ```
+   This command will install FastAPI, Pydantic, and FastAPI-Mail packages
