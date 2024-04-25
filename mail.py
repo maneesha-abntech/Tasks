@@ -1,5 +1,8 @@
+
 from fastapi import FastAPI, HTTPException
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from pydantic import BaseModel, EmailStr  # Import EmailStr for email validation
+import sqlite3
 import random
 import string
 
@@ -17,29 +20,44 @@ conf = ConnectionConfig(
     USE_CREDENTIALS=True,
     VALIDATE_CERTS=True
 )
-otp_storage = {}
+
+# SQLite database connection
+conn = sqlite3.connect('users.db')
+cursor = conn.cursor()
+cursor.execute('''CREATE TABLE IF NOT EXISTS users
+                  (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT UNIQUE, otp TEXT)''')
+conn.commit()
+
+# Pydantic model for user data
+class User(BaseModel):
+    email: EmailStr  # Use EmailStr for email validation
+
+# Pydantic model for OTP storage
+class OTPStorage(BaseModel):
+    email: str
+    otp: str
 
 @app.post("/forgot-password/")
-async def send_otp_for_password_reset(email: str):
+async def send_otp_for_password_reset(user: User):
     """
     Send OTP for password reset to the provided email.
 
     Parameters:
-        -->email (str): The email address to send the OTP.
-
-    Returns:
-        dict: A message indicating the OTP has been sent successfully.
+        -->user (User): User data containing the email address.
     """
     # Generate and send OTP
     otp = ''.join(random.choices(string.digits, k=6))
-    otp_storage[email] = otp
-    message = f"<h3> Your OTP for password reset is</h1>: <b> {otp} </b>"
+    cursor.execute("INSERT OR REPLACE INTO users (email, otp) VALUES (?, ?)", (user.email, otp))
+    conn.commit()
+
+    message = f"<h3>Your OTP for password reset is</h3>: <b>{otp}</b>"
     message_schema = MessageSchema(
         subject="Password Reset OTP",
-        recipients=[email],
+        recipients=[user.email],
         body=message,
         subtype="html"
     )
+
     fm = FastMail(conf)
     await fm.send_message(message=message_schema)
     return {"message": "OTP sent successfully"}
@@ -51,21 +69,21 @@ async def reset_password(email: str, otp: str, new_password: str, confirm_passwo
 
     Parameters:
         -->email (str): The email address for which to reset the password.
-        --> otp (str): The OTP received for password reset.
-        --> new_password (str): The new password.
-        --> confirm_password (str): The confirmation of the new password.
-
-    Returns:
-        dict: A message indicating the password reset was successful.
+        -->otp (str): The OTP received for password reset.
+        -->new_password (str): The new password.
+        -->confirm_password (str): The confirmation of the new password.
     """
-    if email in otp_storage and otp_storage[email] == otp:
+    cursor.execute("SELECT otp FROM users WHERE email = ?", (email,))
+    stored_otp = cursor.fetchone()
+    if stored_otp and stored_otp[0] == otp:
         # Check if new password matches confirm password
         if new_password == confirm_password:
             # For demonstration purposes, let's just print the updated password
             print("Password for " + email + " updated to: " + new_password)
             
             # Clear OTP after successful reset
-            del otp_storage[email]
+            cursor.execute("DELETE FROM users WHERE email = ?", (email,))
+            conn.commit()
 
             # Send confirmation email
             await send_confirmation_email(email)
@@ -76,7 +94,6 @@ async def reset_password(email: str, otp: str, new_password: str, confirm_passwo
     else:
         raise HTTPException(status_code=400, detail="Invalid OTP")
 
-
 async def send_confirmation_email(email: str):
     """
     Send a confirmation email for password reset.
@@ -84,7 +101,7 @@ async def send_confirmation_email(email: str):
     Parameters:
         -->email (str): The email address to which the confirmation email is sent.
     """
-    subject = "<h2> Password Reset Successful </h2>"
+    subject = "<h2>Password Reset Successful</h2>"
     message = "Your password has been reset successfully."
 
     message_schema = MessageSchema(
