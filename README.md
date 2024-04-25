@@ -34,15 +34,6 @@
 
 **Tutorial-User Guide** : <a href="https://fastapi.tiangolo.com" target="_blank">https://fastapi.tiangolo.com</a>
 
-## Requirements
-
-Python 3.8+
-
-FastAPI stands on the shoulders of giants:
-
-* <a href="https://www.starlette.io/" target="_blank">Starlette</a> for the web parts.
-* <a href="https://docs.pydantic.dev/" target="_blank">Pydantic</a> for the data parts.
-
 ## Installation
 
 <div class="termy">
@@ -104,4 +95,14 @@ An ORM has tools to convert ("map") between objects in code and database tables 
 
 With an ORM, you normally create a class that represents a table in a SQL database, each attribute of the class represents a column, with a name and a type.
 
+## FastAPI Password Reset
 
+This project demonstrates a simple password reset functionality using FastAPI, Pydantic, and SQLite.
+
+## Requirements
+
+- Python 3.x
+- FastAPI
+- Pydantic
+- fastapi-mail
+- SQLite
