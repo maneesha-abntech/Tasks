@@ -1,0 +1,5 @@
+python 3.x
+fastapi
+pydantic
+fastapi-mail
+SQLite
