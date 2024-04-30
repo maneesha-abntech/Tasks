@@ -41,9 +41,4 @@ def get_positive_integer():
 num = get_positive_integer()
     if num is not None:
         print("You entered:", num)
-
-
-
-
-
 '''
